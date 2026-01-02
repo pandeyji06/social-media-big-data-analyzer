@@ -108,5 +108,4 @@ with tab_twitter:
 
         st.success(f"Fetched {len(tweets)} tweets")
         generate_wordcloud(tweets)
-streamlit run app.py
 
