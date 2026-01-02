@@ -1,4 +1,4 @@
-pip install streamlit pandas snscrape praw wordcloud matplotlib nltk scikit-learn
+
 import streamlit as st
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
