@@ -3,10 +3,9 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import nltk
 from sklearn.feature_extraction.text import CountVectorizer
-import snscrape.modules.twitter as sntwitter
 import praw
 
-# Download stopwords safely
+# Download stopwords
 nltk.download("stopwords", quiet=True)
 from nltk.corpus import stopwords
 
@@ -19,7 +18,7 @@ st.set_page_config(
 )
 
 st.title("📊 Social Media Big Data Analyzer")
-st.write("Word Cloud generation from Social Media platforms")
+st.write("Trending topic analysis using Word Cloud")
 
 # ---------------- WORD CLOUD FUNCTION ----------------
 def generate_wordcloud(text_data):
@@ -57,13 +56,13 @@ tab_fb, tab_reddit, tab_twitter = st.tabs(
 # ---------------- FACEBOOK TAB ----------------
 with tab_fb:
     st.subheader("Facebook Analyzer")
-    st.info("Facebook API is restricted. Data is simulated for academic use.")
+    st.info("Facebook API is restricted. Using simulated public post data.")
 
     topic = st.text_input("Enter Topic", key="fb_topic")
     limit = st.slider("Number of Posts", 500, 5000, 1000, key="fb_limit")
 
     if st.button("Generate Facebook Word Cloud"):
-        data = [f"{topic} related facebook post {i}" for i in range(limit)]
+        data = [f"{topic} facebook post {i}" for i in range(limit)]
         generate_wordcloud(data)
 
 # ---------------- REDDIT TAB ----------------
@@ -82,28 +81,19 @@ with tab_reddit:
 
         posts = []
         for submission in reddit.subreddit("all").search(topic, limit=limit):
-            text = submission.title + " " + submission.selftext
-            posts.append(text)
+            posts.append(submission.title + " " + submission.selftext)
 
-        st.success(f"Fetched {len(posts)} posts")
+        st.success(f"Fetched {len(posts)} Reddit posts")
         generate_wordcloud(posts)
 
 # ---------------- TWITTER TAB ----------------
 with tab_twitter:
     st.subheader("Twitter Analyzer")
+    st.warning("Twitter scraping is simulated due to Python 3.13 limitations.")
 
     topic = st.text_input("Enter Topic or Hashtag", key="twitter_topic")
     limit = st.slider("Number of Tweets", 500, 5000, 1000, key="twitter_limit")
 
     if st.button("Generate Twitter Word Cloud"):
-        tweets = []
-
-        for i, tweet in enumerate(
-            sntwitter.TwitterSearchScraper(topic).get_items()
-        ):
-            if i >= limit:
-                break
-            tweets.append(tweet.content)
-
-        st.success(f"Fetched {len(tweets)} tweets")
+        tweets = [f"{topic} twitter tweet {i}" for i in range(limit)]
         generate_wordcloud(tweets)
